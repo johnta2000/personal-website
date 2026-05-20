@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lost Lands 2026 Lineup</title>
+    <style>
+      :root {
+        --bg: #061313;
+        --bg-strong: #04100f;
+        --panel: rgba(8, 25, 22, 0.88);
+        --panel-solid: #0a1917;
+        --panel-soft: rgba(20, 45, 39, 0.72);
+        --line: rgba(160, 225, 197, 0.2);
+        --line-strong: rgba(246, 137, 59, 0.48);
+        --text: #f8fbef;
+        --muted: #b5c9bb;
+        --fern: #37d38b;
+        --teal: #18c9c1;
+        --ember: #ff7b39;
+        --gold: #f6cf65;
+        --violet: #a685ff;
+        --danger: #ff5f6d;
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        color-scheme: dark;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 50% 0%, rgba(40, 210, 172, 0.18), transparent 34%),
+          linear-gradient(180deg, #061715 0, #030908 100%);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Arial, Helvetica, sans-serif;
+      }
+
+      body::before {
+        position: fixed;
+        inset: -28px;
+        z-index: -1;
+        background:
+          linear-gradient(180deg, rgba(2, 7, 6, 0.28), rgba(2, 8, 7, 0.8) 52%, rgba(2, 8, 7, 0.92)),
+          url("./assets/lost-lands-2026-lineup.jpg") center top / min(1180px, 122vw) auto repeat-y;
+        content: "";
+        filter: saturate(1.12) contrast(1.03);
+      }
+
+      body::after {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(180deg, rgba(2, 8, 7, 0.12), rgba(2, 8, 7, 0.72) 36%, rgba(2, 8, 7, 0.88)),
+          linear-gradient(90deg, rgba(2, 8, 7, 0.78) 0, rgba(2, 8, 7, 0.18) 22%, rgba(2, 8, 7, 0.18) 78%, rgba(2, 8, 7, 0.78) 100%),
+          radial-gradient(circle at 50% 12%, rgba(255, 124, 43, 0.18), transparent 30%),
+          radial-gradient(circle at 50% 4%, rgba(24, 201, 193, 0.24), transparent 36%);
+        content: "";
+        pointer-events: none;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .app-page {
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      .shell {
+        width: min(1320px, 100%);
+        margin: 0 auto;
+      }
+
+      .app-header {
+        display: block;
+        margin-bottom: 12px;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          linear-gradient(90deg, rgba(8, 25, 22, 0.96), rgba(18, 42, 35, 0.88)),
+          var(--panel-solid);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+      }
+
+      .header-copy {
+        min-width: 0;
+      }
+
+      .eyebrow {
+        margin: 0 0 5px;
+        color: var(--gold);
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 920px;
+        font-size: clamp(1.42rem, 3vw, 2.35rem);
+        line-height: 1;
+        font-weight: 950;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0 0;
+      }
+
+      .metric {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 6px 10px;
+        border: 1px solid rgba(246, 207, 101, 0.34);
+        border-radius: 8px;
+        background: rgba(4, 16, 15, 0.72);
+        color: #fff7c6;
+        font-size: 0.84rem;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .toolbar {
+        display: grid;
+        grid-template-columns:
+          minmax(220px, 1fr)
+          minmax(134px, 0.4fr)
+          minmax(150px, 0.46fr)
+          minmax(148px, 0.46fr)
+          auto auto;
+        gap: 9px;
+        align-items: center;
+        margin: 0 0 14px;
+        padding: 11px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(5, 19, 18, 0.92);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(16px);
+      }
+
+      .search-field,
+      .select-field {
+        width: 100%;
+        min-height: 40px;
+        padding: 0 12px;
+        border: 1px solid rgba(160, 225, 197, 0.28);
+        border-radius: 8px;
+        background: rgba(4, 16, 15, 0.88);
+        color: var(--text);
+      }
+
+      .search-field::placeholder {
+        color: rgba(181, 201, 187, 0.78);
+      }
+
+      .search-field:focus,
+      .select-field:focus,
+      .button:focus,
+      .segmented button:focus,
+      .favorite-button:focus {
+        outline: 3px solid rgba(24, 201, 193, 0.18);
+        border-color: var(--teal);
+      }
+
+      .segmented {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 40px;
+        overflow: hidden;
+        border: 1px solid rgba(160, 225, 197, 0.28);
+        border-radius: 8px;
+        background: rgba(4, 16, 15, 0.88);
+      }
+
+      .segmented button {
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 850;
+      }
+
+      .segmented button.is-active {
+        background: linear-gradient(90deg, rgba(55, 211, 139, 0.22), rgba(255, 123, 57, 0.2));
+        color: var(--text);
+      }
+
+      .button {
+        min-height: 40px;
+        padding: 0 12px;
+        border: 1px solid rgba(246, 137, 59, 0.44);
+        border-radius: 8px;
+        background: rgba(255, 123, 57, 0.13);
+        color: #ffe3c9;
+        font-size: 0.86rem;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .button:hover {
+        border-color: rgba(246, 207, 101, 0.72);
+        background: rgba(246, 137, 59, 0.22);
+      }
+
+      .status-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .favorite-note {
+        color: #ffddb1;
+      }
+
+      .content-panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(8, 25, 22, 0.92), rgba(5, 15, 14, 0.95)),
+          var(--panel-solid);
+        box-shadow: var(--shadow);
+      }
+
+      .poster-view {
+        padding: clamp(16px, 2.6vw, 30px);
+      }
+
+      .billing-block + .billing-block {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+
+      .block-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 13px;
+      }
+
+      .block-head h2 {
+        margin: 0;
+        color: var(--gold);
+        font-size: 0.86rem;
+        font-weight: 950;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .block-head span {
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .artist-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .artist-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: 1px solid rgba(160, 225, 197, 0.18);
+        border-radius: 8px;
+        background: rgba(4, 16, 15, 0.56);
+        color: var(--text);
+        font-size: clamp(0.82rem, 1.1vw, 1rem);
+        font-weight: 900;
+        letter-spacing: 0.015em;
+        text-transform: uppercase;
+      }
+
+      .artist-chip.main {
+        min-height: 39px;
+        border-color: rgba(246, 137, 59, 0.4);
+        background: rgba(255, 123, 57, 0.12);
+        color: #fff7e8;
+        font-size: clamp(0.95rem, 1.45vw, 1.35rem);
+      }
+
+      .artist-chip.is-favorite {
+        border-color: rgba(246, 207, 101, 0.84);
+        background:
+          linear-gradient(90deg, rgba(246, 207, 101, 0.2), rgba(24, 201, 193, 0.12)),
+          rgba(4, 16, 15, 0.72);
+      }
+
+      .genre-pill {
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: rgba(24, 201, 193, 0.12);
+        color: #bffef2;
+        font-size: 0.68rem;
+        font-weight: 950;
+        letter-spacing: 0.05em;
+      }
+
+      .table-wrap {
+        overflow: visible;
+      }
+
+      table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+        font-size: 0.92rem;
+      }
+
+      col.col-favorite {
+        width: 62px;
+      }
+
+      col.col-artist {
+        width: 50%;
+      }
+
+      col.col-type {
+        width: 14%;
+      }
+
+      col.col-genre {
+        width: auto;
+      }
+
+      th,
+      td {
+        padding: 13px 16px;
+        border-right: 1px solid rgba(160, 225, 197, 0.12);
+        border-bottom: 1px solid rgba(160, 225, 197, 0.13);
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th:last-child,
+      td:last-child {
+        border-right: 0;
+      }
+
+      thead {
+        position: sticky;
+        top: 0;
+        z-index: 8;
+      }
+
+      th {
+        background: #0c1d1a;
+        box-shadow: 0 1px 0 rgba(160, 225, 197, 0.16);
+        color: #ffddb1;
+        font-size: 0.76rem;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        overflow: hidden;
+        text-overflow: clip;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      tbody tr:hover {
+        background: rgba(55, 211, 139, 0.06);
+      }
+
+      .artist-cell {
+        min-width: 0;
+        color: var(--text);
+        font-weight: 900;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .type-cell,
+      .genre-cell {
+        min-width: 0;
+        color: var(--muted);
+        font-weight: 750;
+        text-align: center;
+      }
+
+      th:nth-child(2),
+      th:nth-child(3),
+      th:nth-child(4) {
+        text-align: center;
+      }
+
+      .favorite-button {
+        display: inline-grid;
+        place-items: center;
+        width: 34px;
+        min-height: 34px;
+        border: 1px solid rgba(160, 225, 197, 0.24);
+        border-radius: 8px;
+        background: rgba(4, 16, 15, 0.56);
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .favorite-button.is-active {
+        border-color: rgba(246, 207, 101, 0.78);
+        background: rgba(246, 207, 101, 0.14);
+        color: var(--gold);
+      }
+
+      .empty-state {
+        padding: 40px 20px;
+        color: var(--muted);
+        text-align: center;
+        font-weight: 800;
+      }
+
+      .toast {
+        position: fixed;
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        z-index: 40;
+        max-width: min(340px, calc(100vw - 32px));
+        padding: 12px 14px;
+        border: 1px solid rgba(246, 207, 101, 0.4);
+        border-radius: 8px;
+        background: #0a1917;
+        color: var(--text);
+        box-shadow: var(--shadow);
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+
+      @media (max-width: 980px) {
+        .app-page {
+          padding: 16px;
+        }
+
+        .toolbar {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .search-field {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .app-page {
+          padding: 8px;
+        }
+
+        input,
+        button,
+        select {
+          min-height: 32px;
+          border-radius: 6px;
+          font-size: 13px;
+        }
+
+        .app-header {
+          padding: 13px;
+        }
+
+        h1 {
+          font-size: clamp(1.45rem, 9vw, 2.05rem);
+          white-space: normal;
+        }
+
+        .eyebrow {
+          font-size: 0.62rem;
+        }
+
+        .summary {
+          gap: 5px;
+          margin-top: 8px;
+        }
+
+        .metric {
+          min-height: 25px;
+          padding: 4px 7px;
+          border-radius: 6px;
+          font-size: 10px;
+        }
+
+        .toolbar {
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+          padding: 8px;
+        }
+
+        .search-field,
+        .select-field {
+          grid-column: 1 / -1;
+          min-height: 32px;
+          padding: 5px 8px;
+        }
+
+        .segmented,
+        .button {
+          min-height: 32px;
+        }
+
+        .button {
+          padding: 0 10px;
+        }
+
+        .status-bar {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 4px;
+          margin-bottom: 8px;
+          font-size: 12px;
+        }
+
+        .block-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .artist-chip,
+        .artist-chip.main {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .table-wrap {
+          overflow: visible;
+        }
+
+        table {
+          width: 100%;
+          min-width: 0;
+          table-layout: fixed;
+          font-size: 9.35px;
+          line-height: 1.1;
+        }
+
+        col.col-favorite {
+          width: 9% !important;
+        }
+
+        col.col-artist {
+          width: 55% !important;
+        }
+
+        col.col-type {
+          width: 13% !important;
+        }
+
+        col.col-genre {
+          width: 23% !important;
+        }
+
+        th,
+        td {
+          padding: 6px 4px;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+
+        th {
+          font-size: 8px;
+          letter-spacing: 0;
+          white-space: nowrap;
+        }
+
+        .artist-cell {
+          font-size: 10px;
+          line-height: 1.15;
+        }
+
+        .type-cell,
+        .genre-cell {
+          font-size: 9px;
+          line-height: 1.15;
+        }
+
+        .favorite-button {
+          width: 24px;
+          min-height: 24px;
+          border-radius: 6px;
+          font-size: 0.78rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-page">
+      <div class="shell">
+        <section class="app-header" aria-labelledby="page-title">
+          <div class="header-copy">
+            <p class="eyebrow">Excision Presents</p>
+            <h1 id="page-title">Lost Lands 2026 Lineup</h1>
+            <div class="summary" aria-label="Lineup summary">
+              <span class="metric" id="artist-count">0 artists</span>
+              <span class="metric">September 18-20, 2026</span>
+              <span class="metric">Set times pending</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="toolbar" aria-label="Lineup controls">
+          <input
+            class="search-field"
+            id="search"
+            type="search"
+            placeholder="Search artists, type, or genre"
+            autocomplete="off"
+          >
+          <select class="select-field" id="billing-filter" aria-label="Type filter">
+            <option value="all">All types</option>
+            <option value="main">Main lineup</option>
+            <option value="support">Support lineup</option>
+            <option value="favorites">Favorites</option>
+          </select>
+          <select class="select-field" id="genre-filter" aria-label="Genre filter">
+            <option value="all">All genres</option>
+          </select>
+          <select class="select-field" id="sort-mode" aria-label="Sort lineup">
+            <option value="poster">Poster order</option>
+            <option value="artist">Artist A-Z</option>
+            <option value="genre">Genre A-Z</option>
+          </select>
+          <div class="segmented" aria-label="View mode">
+            <button class="is-active" type="button" id="poster-view-button">Poster</button>
+            <button type="button" id="table-view-button">Table</button>
+          </div>
+          <button class="button" type="button" id="share-button">Share</button>
+        </section>
+
+        <div class="status-bar">
+          <span id="result-count">Showing 0 artists</span>
+          <span class="favorite-note" id="favorite-count">0 favorites</span>
+        </div>
+
+        <section class="content-panel" id="poster-view" aria-label="Poster style lineup">
+          <div class="poster-view" id="poster-content"></div>
+        </section>
+
+        <section class="content-panel table-wrap" id="table-view" aria-label="Lineup table" hidden>
+          <table>
+            <colgroup>
+              <col class="col-favorite">
+              <col class="col-artist">
+              <col class="col-type">
+              <col class="col-genre">
+            </colgroup>
+            <thead>
+              <tr>
+                <th aria-label="Favorite"></th>
+                <th>Artist</th>
+                <th>Type</th>
+                <th>Genre</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const mainLineup = `
+        ADVENTURE CLUB | ÆON:MODE | ALLEYCVT | ARMNHMR | ATLIENS | AUDIOFREQ
+        | BARELY ALIVE | BEAR GRILLZ | BENDA | BLOSSOM | BOOGIE T | BORGORE | BOU
+        | CALCIUM | CANABLISS | CASPA | CRANKDAT | CRAZE | CULTURE SHOCK | CYCLOPS
+        | DELTA HEAVY | DIESELBOY | DION TIMMER | DIRT MONKEY | DIRTYPHONICS
+        | DISTINCT MOTIVE | DOCTOR P | DR. FRESCH | DRINKURWATER | EFFIN | EMORFIK
+        | EPTIC | EXCISION (2 HOUR SET) | EXCISION (DETOX SET) | EXCISION B2B SPACE LACES
+        | FLOSSTRADAMUS | FLUX PAVILION | FUNTCASE | GANJA WHITE NIGHT | GHASTLY | GHENGAR
+        | GLADDE PALING | GRABBITZ | HAIRITAGE | HEDEX | HEYZ | HOL! | ILLENIUM | INFEKT
+        | IVY LAB | JANTSEN | JESSICA AUDIFFRED | JKYL & HYDE | KAI WACHI | KNOW GOOD
+        | KOMPANY | KREWELLA | LAYZ | LEVEL UP | LEVITY | LIL TEXAS | LIQUID STRANGER
+        | LYNY | MEFJUS | NGHTMRE | OLIVERSE | PASSPORT | PHASEONE | RAVENSCOON
+        | RAY VOLPE | REAPER | THE RESISTANCE | RIOT TEN | SAMPLIFIRE | SEVEN LIONS
+        | SIGMA | SIPPY | SLANDER | SMOAKLAND | SODOWN | STUMPI | SUBTRONICS
+        | SULLIVAN KING | TAIKI NULIGHT | TRIVECTA | TRUTH | VIRTUAL RIOT | WAX MOTIF
+        | WHETHAN | THE WIDDLER | WILLIAM BLACK | WONKYWILLA | WOOLI | YOOKIE | ZINGARA
+        | ZOMBOY
+      `;
+
+      const supportLineup = `
+        SJ | 2DY4 | ALIENPARK | ALL THE REASON | ARLO | AU5 | AUSTERIA | AVELLO
+        | BADKLAAT | BASSTRIPPER | BELLA RENEE | BIG FLORIDA | BRAINRACK | CAPOCHINO
+        | CASEY CLUB | CHAMPAGNE DRIP | CHASSI | CHOZEN | CODD DUBZ | CRIZZLY | CRUMB PIT
+        | CRYSTAL SKIES | DARKSIDERZ | DEADCROW | DIRTYSNATCHA | DISTANT MATTER
+        | DODGE & FUSKI | DR. USHUU | DREAM TAKERS | DUBSCRIBE | FINNUH | FUTURE EXIT
+        | GARDELLA | GREEN MATTER | HALIENE | HERSHE | HOSTAGE SITUATION | HURTBOX
+        | HVDES | HYDRAULIX | IMANU | IVORY | IZADI | IZZY VADIM | JAENGA | JOSH TEED
+        | KILLMATTER | KLIPTIC | KLO | LAZRUS | LEOTRIX | LOWCATION | LUCI | LUMASI
+        | MACHAKI | MAD DUBZ | MADGRRL | MILE32 | MINDSET | MODAL NODES | MOZEY | MPORT
+        | MUERTE | MYRIAS | MYTHM | NEOTEK | NEUMONIC | NIKITA, THE WICKED | NIMDA
+        | NOETIKA | OG NIXIN | ONARA | PAPER SKIES | PEGBOARD NERDS | PHRVA | PONI
+        | PRETTY SWEET | PROBCAUSE | PROSECUTE | REMK | RICHARD FINGER | RIOT | ROI*
+        | RUSN | RYNS | RZRKT | SAINT MILLER | SETH DAVID | SHLUMP | SISTO | SIKLAH
+        | SPACE WIZARD | SPORTMODE | SQISHI | STONED LEVEL | SUBSONIC | SUPER FUTURE
+        | TISOKI | TOKYO MACHINE | TWOPERCENT | TYNAN | USAYBFLOW | VAMPA | VKTM
+        | WARLORD | WHALES | WILEY | WRAZ | XOTIX | YETEP | YVM3 | ZEN SELEKTA | ZERO
+        | ZOEY808
+      `;
+
+      const genreByArtist = {
+        "2DY4": "Dubstep",
+        "ADVENTURE CLUB": "Melodic Bass",
+        "ÆON:MODE": "Drum & Bass",
+        "ALLEYCVT": "Dubstep",
+        "ARMNHMR": "Melodic Bass",
+        "ATLIENS": "Dubstep",
+        "AUDIOFREQ": "Hard Dance",
+        "AU5": "Melodic Bass",
+        "AUSTERIA": "Dubstep",
+        "AVELLO": "Dubstep",
+        "BADKLAAT": "Dubstep",
+        "BARELY ALIVE": "Dubstep",
+        "BASSTRIPPER": "Drum & Bass",
+        "BEAR GRILLZ": "Dubstep",
+        "BENDA": "Dubstep",
+        "BLOSSOM": "Bass House",
+        "BOOGIE T": "Dubstep",
+        "BORGORE": "Dubstep",
+        "BOU": "Drum & Bass",
+        "CALCIUM": "Dubstep",
+        "CANABLISS": "Bass",
+        "CASPA": "Dubstep",
+        "CHAMPAGNE DRIP": "Bass",
+        "CODD DUBZ": "Dubstep",
+        "CRANKDAT": "Dubstep",
+        "CRAZE": "Trap",
+        "CRIZZLY": "Dubstep",
+        "CRYSTAL SKIES": "Melodic Bass",
+        "CULTURE SHOCK": "Drum & Bass",
+        "CYCLOPS": "Dubstep",
+        "DARKSIDERZ": "Hard Dance",
+        "DEADCROW": "Wave",
+        "DELTA HEAVY": "Drum & Bass",
+        "DIESELBOY": "Drum & Bass",
+        "DION TIMMER": "Dubstep",
+        "DIRT MONKEY": "Dubstep",
+        "DIRTYPHONICS": "Dubstep",
+        "DISTINCT MOTIVE": "Dubstep",
+        "DODGE & FUSKI": "Dubstep",
+        "DOCTOR P": "Dubstep",
+        "DR. FRESCH": "Bass House",
+        "DRINKURWATER": "Dubstep",
+        "EFFIN": "Dubstep",
+        "EMORFIK": "Dubstep",
+        "EPTIC": "Dubstep",
+        "EXCISION (2 HOUR SET)": "Dubstep",
+        "EXCISION (DETOX SET)": "Dubstep",
+        "EXCISION B2B SPACE LACES": "Dubstep",
+        "FLOSSTRADAMUS": "Trap",
+        "FLUX PAVILION": "Dubstep",
+        "FUNTCASE": "Dubstep",
+        "GANJA WHITE NIGHT": "Dubstep",
+        "GHASTLY": "Bass House",
+        "GHENGAR": "Dubstep",
+        "GLADDE PALING": "Bass",
+        "GRABBITZ": "Bass",
+        "GREEN MATTER": "Bass",
+        "HAIRITAGE": "Dubstep",
+        "HALIENE": "Melodic Bass",
+        "HEDEX": "Drum & Bass",
+        "HEYZ": "Dubstep",
+        "HOL!": "Dubstep",
+        "ILLENIUM": "Melodic Bass",
+        "IMANU": "Drum & Bass",
+        "INFEKT": "Dubstep",
+        "IVY LAB": "Bass",
+        "JANTSEN": "Dubstep",
+        "JESSICA AUDIFFRED": "Dubstep",
+        "JKYL & HYDE": "Dubstep",
+        "KAI WACHI": "Dubstep",
+        "KOMPANY": "Dubstep",
+        "KREWELLA": "Bass",
+        "LAYZ": "Dubstep",
+        "LEVEL UP": "Dubstep",
+        "LEVITY": "Bass",
+        "LIL TEXAS": "Hard Dance",
+        "LIQUID STRANGER": "Bass",
+        "LYNY": "Bass",
+        "MEFJUS": "Drum & Bass",
+        "NGHTMRE": "Bass",
+        "NIKITA, THE WICKED": "Bass",
+        "OLIVERSE": "Dubstep",
+        "PASSPORT": "Bass",
+        "PEGBOARD NERDS": "Bass",
+        "PHASEONE": "Dubstep",
+        "RAVENSCOON": "Bass",
+        "RAY VOLPE": "Dubstep",
+        "REAPER": "Drum & Bass",
+        "RIOT": "Dubstep",
+        "RIOT TEN": "Dubstep",
+        "SAMPLIFIRE": "Dubstep",
+        "SEVEN LIONS": "Melodic Bass",
+        "SIGMA": "Drum & Bass",
+        "SIPPY": "Dubstep",
+        "SLANDER": "Melodic Bass",
+        "SMOAKLAND": "Bass",
+        "SODOWN": "Bass",
+        "SPACE WIZARD": "Dubstep",
+        "STUMPI": "Bass House",
+        "SUBSONIC": "Drum & Bass",
+        "SUBTRONICS": "Dubstep",
+        "SULLIVAN KING": "Dubstep",
+        "TAIKI NULIGHT": "UK Bass",
+        "THE RESISTANCE": "Dubstep",
+        "THE WIDDLER": "Dubstep",
+        "TISOKI": "Dubstep",
+        "TOKYO MACHINE": "Bass",
+        "TRIVECTA": "Melodic Bass",
+        "TRUTH": "Dubstep",
+        "TYNAN": "Dubstep",
+        "VAMPA": "Dubstep",
+        "VIRTUAL RIOT": "Dubstep",
+        "WAX MOTIF": "Bass House",
+        "WHETHAN": "Bass",
+        "WHALES": "Dubstep",
+        "WILLIAM BLACK": "Melodic Bass",
+        "WONKYWILLA": "Bass",
+        "WOOLI": "Dubstep",
+        "YOOKIE": "Dubstep",
+        "YETEP": "Melodic Bass",
+        "YVM3": "Dubstep",
+        "ZEN SELEKTA": "Bass",
+        "ZINGARA": "Bass",
+        "ZOMBOY": "Dubstep"
+      };
+
+      const artistSlug = (artist) =>
+        artist
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+
+      const parseLineup = (value, billing) =>
+        value
+          .split("|")
+          .map((artist) => artist.trim().replace(/\s+/g, " "))
+          .filter(Boolean)
+          .map((artist, index) => ({
+            id: `${billing.toLowerCase()}-${artistSlug(artist)}-${index}`,
+            artist,
+            billing,
+            genre: genreByArtist[artist] || "Bass",
+            day: "",
+            time: "",
+            stage: "",
+            notes: ""
+          }));
+
+      const lineup = [
+        ...parseLineup(mainLineup, "Main"),
+        ...parseLineup(supportLineup, "Support")
+      ].map((entry, index) => ({ ...entry, posterIndex: index }));
+
+      const els = {
+        artistCount: document.getElementById("artist-count"),
+        billingFilter: document.getElementById("billing-filter"),
+        favoriteCount: document.getElementById("favorite-count"),
+        genreFilter: document.getElementById("genre-filter"),
+        posterContent: document.getElementById("poster-content"),
+        posterView: document.getElementById("poster-view"),
+        posterViewButton: document.getElementById("poster-view-button"),
+        resultCount: document.getElementById("result-count"),
+        search: document.getElementById("search"),
+        shareButton: document.getElementById("share-button"),
+        sortMode: document.getElementById("sort-mode"),
+        tableBody: document.getElementById("table-body"),
+        tableView: document.getElementById("table-view"),
+        tableViewButton: document.getElementById("table-view-button")
+      };
+
+      const favoriteStorageKey = "lost-lands-2026-lineup-favorites";
+      let favorites = new Set(JSON.parse(localStorage.getItem(favoriteStorageKey) || "[]"));
+      let activeView = "poster";
+
+      function normalizeText(value) {
+        return value
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function readStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        els.search.value = params.get("q") || "";
+        els.billingFilter.value = params.get("type") || params.get("billing") || "all";
+        els.genreFilter.value = params.get("genre") || "all";
+        els.sortMode.value = params.get("sort") || "poster";
+        activeView = params.get("view") === "table" ? "table" : "poster";
+      }
+
+      function writeStateToUrl() {
+        const params = new URLSearchParams();
+        if (els.search.value.trim()) params.set("q", els.search.value.trim());
+        if (els.billingFilter.value !== "all") params.set("type", els.billingFilter.value);
+        if (els.genreFilter.value !== "all") params.set("genre", els.genreFilter.value);
+        if (els.sortMode.value !== "poster") params.set("sort", els.sortMode.value);
+        if (activeView !== "poster") params.set("view", activeView);
+        const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}`;
+        window.history.replaceState({}, "", next);
+      }
+
+      function getFilteredLineup() {
+        const query = normalizeText(els.search.value.trim());
+        const type = els.billingFilter.value;
+        const genre = els.genreFilter.value;
+        const sortMode = els.sortMode.value;
+
+        const filtered = lineup.filter((entry) => {
+          const matchesQuery =
+            !query ||
+            normalizeText(`${entry.artist} ${entry.billing} ${entry.genre}`).includes(query);
+          const matchesType =
+            type === "all" ||
+            (type === "favorites" && favorites.has(entry.id)) ||
+            entry.billing.toLowerCase() === type;
+          const matchesGenre = genre === "all" || entry.genre === genre;
+
+          return matchesQuery && matchesType && matchesGenre;
+        });
+
+        return filtered.sort((left, right) => {
+          if (sortMode === "artist") {
+            return left.artist.localeCompare(right.artist, undefined, { sensitivity: "base" });
+          }
+
+          if (sortMode === "genre") {
+            return (
+              left.genre.localeCompare(right.genre, undefined, { sensitivity: "base" }) ||
+              left.artist.localeCompare(right.artist, undefined, { sensitivity: "base" })
+            );
+          }
+
+          return left.posterIndex - right.posterIndex;
+        });
+      }
+
+      function renderPosterGroup(entries, billing) {
+        if (!entries.length) return "";
+
+        const chips = entries
+          .map((entry) => {
+            const favoriteClass = favorites.has(entry.id) ? " is-favorite" : "";
+            const mainClass = billing === "Main" ? " main" : "";
+            return `
+              <span class="artist-chip${mainClass}${favoriteClass}">
+                <span>${escapeHtml(entry.artist)}</span>
+                <span class="genre-pill">${escapeHtml(entry.genre)}</span>
+              </span>
+            `;
+          })
+          .join("");
+
+        return `
+          <section class="billing-block">
+            <div class="block-head">
+              <h2>${escapeHtml(billing)} Lineup</h2>
+              <span>${entries.length} artists</span>
+            </div>
+            <div class="artist-cloud">${chips}</div>
+          </section>
+        `;
+      }
+
+      function renderPoster(entries) {
+        if (!entries.length) {
+          els.posterContent.innerHTML = `<div class="empty-state">No artists match the current filters.</div>`;
+          return;
+        }
+
+        const mainEntries = entries.filter((entry) => entry.billing === "Main");
+        const supportEntries = entries.filter((entry) => entry.billing === "Support");
+        els.posterContent.innerHTML =
+          renderPosterGroup(mainEntries, "Main") + renderPosterGroup(supportEntries, "Support");
+      }
+
+      function renderTable(entries) {
+        if (!entries.length) {
+          els.tableBody.innerHTML = `
+            <tr>
+              <td class="empty-state" colspan="4">No artists match the current filters.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        els.tableBody.innerHTML = entries
+          .map(
+            (entry) => `
+              <tr>
+                <td>
+                  <button
+                    class="favorite-button ${favorites.has(entry.id) ? "is-active" : ""}"
+                    type="button"
+                    data-favorite-id="${entry.id}"
+                    aria-label="${favorites.has(entry.id) ? "Remove" : "Add"} ${escapeHtml(entry.artist)} favorite"
+                  >★</button>
+                </td>
+                <td class="artist-cell">${escapeHtml(entry.artist)}</td>
+                <td class="type-cell">${escapeHtml(entry.billing)}</td>
+                <td class="genre-cell">${escapeHtml(entry.genre)}</td>
+              </tr>
+            `
+          )
+          .join("");
+      }
+
+      function updateViewButtons() {
+        const isPoster = activeView === "poster";
+        els.posterView.hidden = !isPoster;
+        els.tableView.hidden = isPoster;
+        els.posterViewButton.classList.toggle("is-active", isPoster);
+        els.tableViewButton.classList.toggle("is-active", !isPoster);
+      }
+
+      function render() {
+        const entries = getFilteredLineup();
+        const favoriteTotal = favorites.size;
+        els.resultCount.textContent = `Showing ${entries.length} of ${lineup.length} artists`;
+        els.favoriteCount.textContent =
+          favoriteTotal === 1 ? "1 favorite" : `${favoriteTotal} favorites`;
+        renderPoster(entries);
+        renderTable(entries);
+        updateViewButtons();
+        writeStateToUrl();
+      }
+
+      function saveFavorites() {
+        localStorage.setItem(favoriteStorageKey, JSON.stringify([...favorites]));
+      }
+
+      function setView(view) {
+        activeView = view;
+        render();
+      }
+
+      function showToast(message) {
+        const existing = document.querySelector(".toast");
+        if (existing) existing.remove();
+
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.setAttribute("role", "status");
+        toast.textContent = message;
+        document.body.append(toast);
+        window.setTimeout(() => toast.remove(), 2200);
+      }
+
+      async function shareCurrentView() {
+        const url = window.location.href;
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            const textarea = document.createElement("textarea");
+            textarea.value = url;
+            textarea.setAttribute("readonly", "");
+            textarea.style.position = "fixed";
+            textarea.style.left = "-9999px";
+            document.body.append(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            textarea.remove();
+          }
+          showToast("Lineup link copied.");
+        } catch (error) {
+          showToast("Could not copy the link.");
+        }
+      }
+
+      function initGenreFilter() {
+        const genres = [...new Set(lineup.map((entry) => entry.genre))].sort((left, right) =>
+          left.localeCompare(right, undefined, { sensitivity: "base" })
+        );
+
+        genres.forEach((genre) => {
+          const option = document.createElement("option");
+          option.value = genre;
+          option.textContent = genre;
+          els.genreFilter.append(option);
+        });
+      }
+
+      function bindEvents() {
+        [els.search, els.billingFilter, els.genreFilter, els.sortMode].forEach((control) => {
+          control.addEventListener("input", render);
+          control.addEventListener("change", render);
+        });
+
+        els.posterViewButton.addEventListener("click", () => setView("poster"));
+        els.tableViewButton.addEventListener("click", () => setView("table"));
+        els.shareButton.addEventListener("click", shareCurrentView);
+
+        els.tableBody.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-favorite-id]");
+          if (!button) return;
+
+          const id = button.dataset.favoriteId;
+          if (favorites.has(id)) {
+            favorites.delete(id);
+          } else {
+            favorites.add(id);
+          }
+
+          saveFavorites();
+          render();
+        });
+
+        window.addEventListener("popstate", () => {
+          readStateFromUrl();
+          render();
+        });
+      }
+
+      els.artistCount.textContent = `${lineup.length} artists`;
+      initGenreFilter();
+      readStateFromUrl();
+      bindEvents();
+      render();
+    </script>
+  </body>
+</html>
