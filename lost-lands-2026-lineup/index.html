@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lost Lands 2026 Lineup</title>
+    <link rel="canonical" href="">
     <style>
       :root {
         --bg: #061313;
@@ -654,8 +655,8 @@
             <option value="genre">Genre A-Z</option>
           </select>
           <div class="segmented" aria-label="View mode">
-            <button class="is-active" type="button" id="poster-view-button">Poster</button>
-            <button type="button" id="table-view-button">Table</button>
+            <button type="button" id="poster-view-button">Poster</button>
+            <button class="is-active" type="button" id="table-view-button">Table</button>
           </div>
           <button class="button" type="button" id="share-button">Share</button>
         </section>
@@ -665,11 +666,11 @@
           <span class="favorite-note" id="favorite-count">0 favorites</span>
         </div>
 
-        <section class="content-panel" id="poster-view" aria-label="Poster style lineup">
+        <section class="content-panel" id="poster-view" aria-label="Poster style lineup" hidden>
           <div class="poster-view" id="poster-content"></div>
         </section>
 
-        <section class="content-panel table-wrap" id="table-view" aria-label="Lineup table" hidden>
+        <section class="content-panel table-wrap" id="table-view" aria-label="Lineup table">
           <table>
             <colgroup>
               <col class="col-favorite">
@@ -905,8 +906,10 @@
       };
 
       const favoriteStorageKey = "lost-lands-2026-lineup-favorites";
-      let favorites = new Set(JSON.parse(localStorage.getItem(favoriteStorageKey) || "[]"));
-      let activeView = "poster";
+      const validFavoriteIds = new Set(lineup.map((entry) => entry.id));
+      const lineupById = new Map(lineup.map((entry) => [entry.id, entry]));
+      let favorites = new Set(readStoredFavorites());
+      let activeView = "table";
 
       function normalizeText(value) {
         return value
@@ -924,13 +927,114 @@
           .replace(/'/g, "&#039;");
       }
 
+      function readStoredFavorites() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(favoriteStorageKey) || "[]");
+          return Array.isArray(stored) ? stored.filter((id) => validFavoriteIds.has(id)) : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function getCanonicalUrl() {
+        const cleanPath = window.location.pathname.replace(/\/index\.html$/, "/");
+        return `${window.location.origin}${cleanPath}`;
+      }
+
+      function setCanonicalUrl() {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) canonical.href = getCanonicalUrl();
+      }
+
+      function getHashParams() {
+        const hash = window.location.hash.startsWith("#")
+          ? window.location.hash.slice(1)
+          : window.location.hash;
+        return new URLSearchParams(hash);
+      }
+
+      function getIncomingParams() {
+        const hashParams = getHashParams();
+        if ([...hashParams.keys()].length) return hashParams;
+        return new URLSearchParams(window.location.search);
+      }
+
+      function encodeSharedFavorites() {
+        const bytes = new Uint8Array(Math.ceil(lineup.length / 8));
+        favorites.forEach((id) => {
+          const index = lineupById.get(id)?.posterIndex;
+          if (Number.isInteger(index)) bytes[Math.floor(index / 8)] |= 1 << (index % 8);
+        });
+
+        const binary = [...bytes].map((byte) => String.fromCharCode(byte)).join("");
+        return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+      }
+
+      function decodeSharedFavorites(value) {
+        if (!value) return [];
+
+        try {
+          const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
+          const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+          const binary = atob(padded);
+          const ids = [];
+
+          [...binary].forEach((character, byteIndex) => {
+            const byte = character.charCodeAt(0);
+            for (let bit = 0; bit < 8; bit += 1) {
+              const index = byteIndex * 8 + bit;
+              if ((byte & (1 << bit)) && lineup[index]) ids.push(lineup[index].id);
+            }
+          });
+
+          return ids;
+        } catch (error) {
+          return value
+            .split(".")
+            .map((token) => Number.parseInt(token, 36))
+            .filter((index) => Number.isInteger(index) && lineup[index])
+            .map((index) => lineup[index].id);
+        }
+      }
+
+      function decodeLegacyFavorites(value) {
+        if (!value) return [];
+
+        return value
+          .split(",")
+          .map((id) => id.trim())
+          .filter((id) => validFavoriteIds.has(id));
+      }
+
       function readStateFromUrl() {
-        const params = new URLSearchParams(window.location.search);
+        const params = getIncomingParams();
         els.search.value = params.get("q") || "";
         els.billingFilter.value = params.get("type") || params.get("billing") || "all";
         els.genreFilter.value = params.get("genre") || "all";
         els.sortMode.value = params.get("sort") || "poster";
-        activeView = params.get("view") === "table" ? "table" : "poster";
+        activeView = params.get("view") === "poster" ? "poster" : "table";
+
+        if (![...els.billingFilter.options].some((option) => option.value === els.billingFilter.value)) {
+          els.billingFilter.value = "all";
+        }
+
+        if (![...els.genreFilter.options].some((option) => option.value === els.genreFilter.value)) {
+          els.genreFilter.value = "all";
+        }
+
+        if (![...els.sortMode.options].some((option) => option.value === els.sortMode.value)) {
+          els.sortMode.value = "poster";
+        }
+
+        const sharedFavorites = [
+          ...decodeSharedFavorites(params.get("f")),
+          ...decodeLegacyFavorites(params.get("favorites"))
+        ];
+
+        if (sharedFavorites.length) {
+          favorites = new Set([...favorites, ...sharedFavorites]);
+          saveFavorites();
+        }
       }
 
       function writeStateToUrl() {
@@ -939,8 +1043,9 @@
         if (els.billingFilter.value !== "all") params.set("type", els.billingFilter.value);
         if (els.genreFilter.value !== "all") params.set("genre", els.genreFilter.value);
         if (els.sortMode.value !== "poster") params.set("sort", els.sortMode.value);
-        if (activeView !== "poster") params.set("view", activeView);
-        const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}`;
+        if (activeView !== "table") params.set("view", activeView);
+        if (favorites.size) params.set("f", encodeSharedFavorites());
+        const next = `${window.location.pathname}${params.toString() ? `#${params}` : ""}`;
         window.history.replaceState({}, "", next);
       }
 
@@ -1070,7 +1175,11 @@
       }
 
       function saveFavorites() {
-        localStorage.setItem(favoriteStorageKey, JSON.stringify([...favorites]));
+        try {
+          localStorage.setItem(favoriteStorageKey, JSON.stringify([...favorites]));
+        } catch (error) {
+          // Sharing still works even when storage is unavailable.
+        }
       }
 
       function setView(view) {
@@ -1091,6 +1200,7 @@
       }
 
       async function shareCurrentView() {
+        writeStateToUrl();
         const url = window.location.href;
         try {
           if (navigator.clipboard && window.isSecureContext) {
@@ -1158,6 +1268,7 @@
 
       els.artistCount.textContent = `${lineup.length} artists`;
       initGenreFilter();
+      setCanonicalUrl();
       readStateFromUrl();
       bindEvents();
       render();
