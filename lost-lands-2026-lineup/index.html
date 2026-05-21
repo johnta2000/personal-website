@@ -152,7 +152,7 @@
           minmax(134px, 0.4fr)
           minmax(150px, 0.46fr)
           minmax(148px, 0.46fr)
-          auto auto;
+          auto auto auto;
         gap: 9px;
         align-items: center;
         margin: 0 0 14px;
@@ -229,6 +229,12 @@
         background: rgba(246, 137, 59, 0.22);
       }
 
+      .toggle-button[aria-pressed="true"] {
+        border-color: rgba(55, 211, 139, 0.72);
+        background: rgba(55, 211, 139, 0.18);
+        color: #d9ffe9;
+      }
+
       .status-bar {
         display: flex;
         flex-wrap: wrap;
@@ -243,6 +249,29 @@
 
       .favorite-note {
         color: #ffddb1;
+      }
+
+      .favorite-status {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .text-button {
+        min-height: 28px;
+        padding: 0 9px;
+        border: 1px solid rgba(160, 225, 197, 0.26);
+        border-radius: 6px;
+        background: rgba(4, 16, 15, 0.78);
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 850;
+      }
+
+      .text-button:hover {
+        border-color: rgba(246, 207, 101, 0.58);
+        color: var(--text);
       }
 
       .content-panel {
@@ -533,6 +562,10 @@
           min-height: 32px;
         }
 
+        .segmented {
+          display: none;
+        }
+
         .button {
           padding: 0 10px;
         }
@@ -644,7 +677,6 @@
             <option value="all">All types</option>
             <option value="main">Main lineup</option>
             <option value="support">Support lineup</option>
-            <option value="favorites">Favorites</option>
           </select>
           <select class="select-field" id="genre-filter" aria-label="Genre filter">
             <option value="all">All genres</option>
@@ -658,12 +690,23 @@
             <button type="button" id="poster-view-button">Poster</button>
             <button class="is-active" type="button" id="table-view-button">Table</button>
           </div>
+          <button class="button toggle-button" type="button" id="favorites-filter-button" aria-pressed="false">
+            Favorites only
+          </button>
           <button class="button" type="button" id="share-button">Share</button>
         </section>
 
         <div class="status-bar">
           <span id="result-count">Showing 0 artists</span>
-          <span class="favorite-note" id="favorite-count">0 favorites</span>
+          <span class="favorite-status">
+            <span class="favorite-note" id="favorite-count">0 favorites</span>
+            <button class="text-button" type="button" id="save-favorites-button" hidden>
+              Save as mine
+            </button>
+            <button class="text-button" type="button" id="clear-favorites-button" hidden>
+              Reset mine
+            </button>
+          </span>
         </div>
 
         <section class="content-panel" id="poster-view" aria-label="Poster style lineup" hidden>
@@ -891,12 +934,15 @@
       const els = {
         artistCount: document.getElementById("artist-count"),
         billingFilter: document.getElementById("billing-filter"),
+        clearFavoritesButton: document.getElementById("clear-favorites-button"),
         favoriteCount: document.getElementById("favorite-count"),
+        favoritesFilterButton: document.getElementById("favorites-filter-button"),
         genreFilter: document.getElementById("genre-filter"),
         posterContent: document.getElementById("poster-content"),
         posterView: document.getElementById("poster-view"),
         posterViewButton: document.getElementById("poster-view-button"),
         resultCount: document.getElementById("result-count"),
+        saveFavoritesButton: document.getElementById("save-favorites-button"),
         search: document.getElementById("search"),
         shareButton: document.getElementById("share-button"),
         sortMode: document.getElementById("sort-mode"),
@@ -908,8 +954,11 @@
       const favoriteStorageKey = "lost-lands-2026-lineup-favorites";
       const validFavoriteIds = new Set(lineup.map((entry) => entry.id));
       const lineupById = new Map(lineup.map((entry) => [entry.id, entry]));
+      const mobileViewQuery = window.matchMedia("(max-width: 760px)");
       let favorites = new Set(readStoredFavorites());
       let activeView = "table";
+      let favoritesOnly = false;
+      let viewingSharedFavorites = false;
 
       function normalizeText(value) {
         return value
@@ -1009,10 +1058,13 @@
       function readStateFromUrl() {
         const params = getIncomingParams();
         els.search.value = params.get("q") || "";
-        els.billingFilter.value = params.get("type") || params.get("billing") || "all";
+        const type = params.get("type") || params.get("billing") || "all";
+        favoritesOnly = params.get("fav") === "1" || type === "favorites";
+        els.billingFilter.value = type === "favorites" ? "all" : type;
         els.genreFilter.value = params.get("genre") || "all";
         els.sortMode.value = params.get("sort") || "poster";
-        activeView = params.get("view") === "poster" ? "poster" : "table";
+        activeView =
+          params.get("view") === "poster" && !mobileViewQuery.matches ? "poster" : "table";
 
         if (![...els.billingFilter.options].some((option) => option.value === els.billingFilter.value)) {
           els.billingFilter.value = "all";
@@ -1026,14 +1078,18 @@
           els.sortMode.value = "poster";
         }
 
+        const hasSharedFavorites = params.has("f") || params.has("favorites");
         const sharedFavorites = [
           ...decodeSharedFavorites(params.get("f")),
           ...decodeLegacyFavorites(params.get("favorites"))
         ];
 
-        if (sharedFavorites.length) {
-          favorites = new Set([...favorites, ...sharedFavorites]);
-          saveFavorites();
+        viewingSharedFavorites = hasSharedFavorites;
+
+        if (hasSharedFavorites) {
+          favorites = new Set(sharedFavorites);
+        } else {
+          favorites = new Set(readStoredFavorites());
         }
       }
 
@@ -1043,7 +1099,8 @@
         if (els.billingFilter.value !== "all") params.set("type", els.billingFilter.value);
         if (els.genreFilter.value !== "all") params.set("genre", els.genreFilter.value);
         if (els.sortMode.value !== "poster") params.set("sort", els.sortMode.value);
-        if (activeView !== "table") params.set("view", activeView);
+        if (activeView !== "table" && !mobileViewQuery.matches) params.set("view", activeView);
+        if (favoritesOnly) params.set("fav", "1");
         if (favorites.size) params.set("f", encodeSharedFavorites());
         const next = `${window.location.pathname}${params.toString() ? `#${params}` : ""}`;
         window.history.replaceState({}, "", next);
@@ -1059,13 +1116,11 @@
           const matchesQuery =
             !query ||
             normalizeText(`${entry.artist} ${entry.billing} ${entry.genre}`).includes(query);
-          const matchesType =
-            type === "all" ||
-            (type === "favorites" && favorites.has(entry.id)) ||
-            entry.billing.toLowerCase() === type;
+          const matchesType = type === "all" || entry.billing.toLowerCase() === type;
           const matchesGenre = genre === "all" || entry.genre === genre;
+          const matchesFavorite = !favoritesOnly || favorites.has(entry.id);
 
-          return matchesQuery && matchesType && matchesGenre;
+          return matchesQuery && matchesType && matchesGenre && matchesFavorite;
         });
 
         return filtered.sort((left, right) => {
@@ -1155,11 +1210,16 @@
       }
 
       function updateViewButtons() {
+        if (mobileViewQuery.matches) activeView = "table";
+
         const isPoster = activeView === "poster";
         els.posterView.hidden = !isPoster;
         els.tableView.hidden = isPoster;
         els.posterViewButton.classList.toggle("is-active", isPoster);
         els.tableViewButton.classList.toggle("is-active", !isPoster);
+        els.favoritesFilterButton.setAttribute("aria-pressed", String(favoritesOnly));
+        els.saveFavoritesButton.hidden = !viewingSharedFavorites || favorites.size === 0;
+        els.clearFavoritesButton.hidden = favorites.size === 0;
       }
 
       function render() {
@@ -1177,14 +1237,36 @@
       function saveFavorites() {
         try {
           localStorage.setItem(favoriteStorageKey, JSON.stringify([...favorites]));
+          viewingSharedFavorites = false;
         } catch (error) {
           // Sharing still works even when storage is unavailable.
         }
       }
 
       function setView(view) {
-        activeView = view;
+        activeView = mobileViewQuery.matches ? "table" : view;
         render();
+      }
+
+      function toggleFavoritesOnly() {
+        favoritesOnly = !favoritesOnly;
+        render();
+      }
+
+      function saveFavoritesAsMine() {
+        saveFavorites();
+        render();
+        showToast("Saved as your favorites on this device.");
+      }
+
+      function clearFavorites() {
+        if (!window.confirm("Reset your saved favorites on this device?")) return;
+        favorites = new Set();
+        favoritesOnly = false;
+        viewingSharedFavorites = false;
+        saveFavorites();
+        render();
+        showToast("Your saved favorites were reset.");
       }
 
       function showToast(message) {
@@ -1243,6 +1325,9 @@
 
         els.posterViewButton.addEventListener("click", () => setView("poster"));
         els.tableViewButton.addEventListener("click", () => setView("table"));
+        els.favoritesFilterButton.addEventListener("click", toggleFavoritesOnly);
+        els.saveFavoritesButton.addEventListener("click", saveFavoritesAsMine);
+        els.clearFavoritesButton.addEventListener("click", clearFavorites);
         els.shareButton.addEventListener("click", shareCurrentView);
 
         els.tableBody.addEventListener("click", (event) => {
@@ -1250,6 +1335,7 @@
           if (!button) return;
 
           const id = button.dataset.favoriteId;
+          const wasViewingSharedFavorites = viewingSharedFavorites;
           if (favorites.has(id)) {
             favorites.delete(id);
           } else {
@@ -1258,12 +1344,15 @@
 
           saveFavorites();
           render();
+          if (wasViewingSharedFavorites) showToast("Edited list saved as yours.");
         });
 
         window.addEventListener("popstate", () => {
           readStateFromUrl();
           render();
         });
+
+        mobileViewQuery.addEventListener("change", render);
       }
 
       els.artistCount.textContent = `${lineup.length} artists`;
