@@ -448,8 +448,12 @@
               </div>
 
               <div class="field">
-                <label for="urlInput">Article URL</label>
-                <input id="urlInput" class="schema-input" type="url" />
+                <label for="slugInput">Article slug</label>
+                <input
+                  id="slugInput"
+                  class="schema-input"
+                  placeholder="best-museums-bank-of-america-museums-on-us-san-francisco"
+                />
               </div>
 
               <div class="field">
@@ -472,16 +476,6 @@
                 <input id="dateModifiedInput" class="schema-input" type="datetime-local" />
               </div>
 
-              <div class="field">
-                <label for="keywordsInput">Keywords</label>
-                <textarea
-                  id="keywordsInput"
-                  class="schema-textarea"
-                  rows="3"
-                  placeholder="One per line or comma-separated"
-                ></textarea>
-              </div>
-
               <button class="copy-button" type="button" data-copy-target="blogOutput">
                 Copy BlogPosting JSON-LD
               </button>
@@ -497,15 +491,7 @@
                 <input id="faqNameInput" class="schema-input" />
               </div>
 
-              <div class="field">
-                <label for="faqJsonInput">FAQ questions JSON</label>
-                <textarea
-                  id="faqJsonInput"
-                  class="schema-textarea"
-                  rows="12"
-                  placeholder='Paste a full FAQPage payload, a mainEntity array, or [{"name":"Question?","text":"Answer."}]'
-                ></textarea>
-              </div>
+              <p>Questions and answers are derived from the FAQ section in Content.</p>
 
               <button class="copy-button" type="button" data-copy-target="faqOutput">
                 Copy FAQPage JSON-LD
@@ -529,14 +515,12 @@
       const wordTotal = document.querySelector("#wordTotal");
       const wordInline = document.querySelector("#wordInline");
       const descriptionInput = document.querySelector("#descriptionInput");
-      const urlInput = document.querySelector("#urlInput");
+      const slugInput = document.querySelector("#slugInput");
       const authorNameInput = document.querySelector("#authorNameInput");
       const authorTypeInput = document.querySelector("#authorTypeInput");
       const datePublishedInput = document.querySelector("#datePublishedInput");
       const dateModifiedInput = document.querySelector("#dateModifiedInput");
-      const keywordsInput = document.querySelector("#keywordsInput");
       const faqNameInput = document.querySelector("#faqNameInput");
-      const faqJsonInput = document.querySelector("#faqJsonInput");
       const blogOutput = document.querySelector("#blogOutput");
       const faqOutput = document.querySelector("#faqOutput");
       const highlightLimit = 160;
@@ -567,14 +551,22 @@
       }
 
       function getUrlValue() {
-        return urlInput.value.trim();
+        const slug = slugInput.value.trim().replace(/^\/+|\/+$/g, "");
+
+        if (!slug) {
+          return "";
+        }
+
+        const normalizedSlug = slug.startsWith("articles/")
+          ? slug.slice("articles/".length)
+          : slug;
+
+        return `https://www.nextcard.com/articles/${normalizedSlug}`;
       }
 
       function getKeywords() {
-        return keywordsInput.value
-          .split(/[\n,]/)
-          .map((keyword) => keyword.trim())
-          .filter(Boolean);
+        const title = getTitleValue();
+        return title ? [title] : [];
       }
 
       function removeEmptyValues(value) {
@@ -761,55 +753,88 @@
         });
       }
 
-      function normalizeFaqItem(item) {
-        if (!item || typeof item !== "object") {
-          return null;
-        }
+      function getCleanText(element) {
+        return element.textContent.replace(/\s+/g, " ").trim();
+      }
 
-        const question =
-          item.name ||
-          item.question ||
-          item.questionName ||
-          item.title ||
-          "";
-        const answer =
-          item.acceptedAnswer?.text ||
-          item.acceptedAnswer ||
-          item.answer ||
-          item.text ||
-          "";
+      function isFaqHeading(element) {
+        return /^h[1-4]$/i.test(element.tagName) && /faq|frequently asked questions/i.test(getCleanText(element));
+      }
 
-        if (!String(question).trim() || !String(answer).trim()) {
-          return null;
-        }
+      function isQuestionHeading(element) {
+        return /^h[2-4]$/i.test(element.tagName) && getCleanText(element).endsWith("?");
+      }
 
-        return {
-          "@type": "Question",
-          name: String(question).trim(),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: String(answer).trim(),
-          },
-        };
+      function getElementDepth(element) {
+        return Number(element.tagName.slice(1));
       }
 
       function parseFaqEntities() {
-        const raw = faqJsonInput.value.trim();
+        const faqHeading = Array.from(contentInput.querySelectorAll("h1, h2, h3, h4")).find(isFaqHeading);
 
-        if (!raw) {
+        if (!faqHeading) {
           return [];
         }
 
-        const parsed = JSON.parse(raw);
-        const entities = Array.isArray(parsed)
-          ? parsed
-          : parsed.mainEntity || parsed.questions || [];
+        const faqDepth = getElementDepth(faqHeading);
+        const questions = [];
+        let currentQuestion = null;
+        let currentAnswer = [];
+        let node = faqHeading.nextElementSibling;
 
-        if (!Array.isArray(entities)) {
-          throw new Error("FAQ JSON must include an array of questions.");
+        function pushQuestion() {
+          if (!currentQuestion) {
+            return;
+          }
+
+          const answer = currentAnswer.join(" ").replace(/\s+/g, " ").trim();
+
+          if (!answer) {
+            return;
+          }
+
+          questions.push({
+            "@type": "Question",
+            name: currentQuestion,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: answer,
+            },
+          });
         }
 
-        return entities.map(normalizeFaqItem).filter(Boolean);
+        while (node) {
+          const tag = node.tagName.toLowerCase();
+
+          if (/^h[1-4]$/.test(tag)) {
+            const depth = getElementDepth(node);
+
+            if (depth <= faqDepth && !isQuestionHeading(node)) {
+              break;
+            }
+
+            if (isQuestionHeading(node)) {
+              pushQuestion();
+              currentQuestion = getCleanText(node);
+              currentAnswer = [];
+              node = node.nextElementSibling;
+              continue;
+            }
+          }
+
+          if (currentQuestion) {
+            const text = getCleanText(node);
+
+            if (text) {
+              currentAnswer.push(text);
+            }
+          }
+
+          node = node.nextElementSibling;
+        }
+
+        pushQuestion();
+        return questions;
       }
 
       function buildFaqSchema() {
@@ -836,11 +861,7 @@
       function updateSchemas() {
         setOutput(blogOutput, JSON.stringify(buildBlogPostingSchema(), null, 2));
 
-        try {
-          setOutput(faqOutput, JSON.stringify(buildFaqSchema(), null, 2));
-        } catch (error) {
-          setOutput(faqOutput, error.message, true);
-        }
+        setOutput(faqOutput, JSON.stringify(buildFaqSchema(), null, 2));
       }
 
       document.querySelectorAll(".toolbar button").forEach((button) => {
@@ -863,14 +884,12 @@
 
       [
         descriptionInput,
-        urlInput,
+        slugInput,
         authorNameInput,
         authorTypeInput,
         datePublishedInput,
         dateModifiedInput,
-        keywordsInput,
         faqNameInput,
-        faqJsonInput,
       ].forEach((input) => {
         input.addEventListener("input", updateSchemas);
       });
