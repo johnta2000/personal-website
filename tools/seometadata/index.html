@@ -61,9 +61,9 @@
 
       .summary {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 10px;
-        min-width: min(420px, 100%);
+        min-width: min(560px, 100%);
       }
 
       .stat {
@@ -120,17 +120,16 @@
       }
 
       .title-input,
-      .content-input,
-      .highlight-layer {
+      .content-editor {
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 8px;
-        font: 18px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          "Liberation Mono", monospace;
         letter-spacing: 0;
       }
 
       .title-input {
+        font: 18px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
         display: block;
         min-height: 96px;
         padding: 12px 14px;
@@ -142,38 +141,16 @@
         white-space: pre-wrap;
       }
 
-      .content-wrap {
-        position: relative;
-        min-height: 360px;
-      }
-
-      .content-input,
-      .highlight-layer {
+      .content-editor {
         min-height: 360px;
         padding: 14px;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-      }
-
-      .content-input {
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        resize: vertical;
-        color: transparent;
-        caret-color: var(--ink);
-        background: transparent;
-        outline: none;
-      }
-
-      .highlight-layer {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
         overflow: auto;
-        pointer-events: none;
+        overflow-wrap: anywhere;
         color: var(--ink);
         background: #fbfcfb;
+        font: 17px/1.55 Inter, ui-sans-serif, system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
+        outline: none;
       }
 
       mark {
@@ -184,10 +161,65 @@
       }
 
       .title-input:focus,
-      .content-input:focus,
-      .content-wrap:focus-within .highlight-layer {
+      .content-editor:focus {
         border-color: var(--focus);
         box-shadow: 0 0 0 3px rgba(36, 107, 254, 0.15);
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .toolbar button {
+        min-width: 38px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfcfb;
+        color: var(--ink);
+        font: 700 13px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover,
+      .toolbar button:focus {
+        border-color: var(--focus);
+        outline: none;
+      }
+
+      .content-editor h1,
+      .content-editor h2,
+      .content-editor h3,
+      .content-editor p,
+      .content-editor ul,
+      .content-editor ol {
+        margin: 0 0 12px;
+      }
+
+      .content-editor h1 {
+        font-size: 34px;
+        line-height: 1.12;
+      }
+
+      .content-editor h2 {
+        font-size: 28px;
+        line-height: 1.18;
+      }
+
+      .content-editor h3 {
+        font-size: 22px;
+        line-height: 1.25;
+      }
+
+      .content-editor ul,
+      .content-editor ol {
+        padding-left: 28px;
+      }
+
+      .content-editor li {
+        margin: 4px 0;
       }
 
       .progress {
@@ -227,9 +259,20 @@
         }
 
         .title-input,
-        .content-input,
-        .highlight-layer {
+        .content-editor {
           font-size: 16px;
+        }
+
+        .content-editor h1 {
+          font-size: 28px;
+        }
+
+        .content-editor h2 {
+          font-size: 23px;
+        }
+
+        .content-editor h3 {
+          font-size: 19px;
         }
       }
     </style>
@@ -252,6 +295,10 @@
               <span>After 160</span>
               <strong id="overTotal">0</strong>
             </div>
+            <div class="stat">
+              <span>Words</span>
+              <strong id="wordTotal">0</strong>
+            </div>
           </div>
         </div>
 
@@ -272,13 +319,31 @@
 
           <div class="field">
             <div class="field-header">
-              <label for="contentInput">Content</label>
-              <span class="count"><strong id="contentInline">0</strong> characters</span>
+              <label id="contentLabel" for="contentInput">Content</label>
+              <span class="count">
+                <strong id="contentInline">0</strong> characters ·
+                <strong id="wordInline">0</strong> words
+              </span>
             </div>
-            <div class="content-wrap">
-              <div id="highlightLayer" class="highlight-layer" aria-hidden="true"></div>
-              <textarea id="contentInput" class="content-input" spellcheck="true"></textarea>
+            <div class="toolbar" aria-label="Content formatting">
+              <button type="button" data-command="formatBlock" data-value="H1" title="Heading 1">H1</button>
+              <button type="button" data-command="formatBlock" data-value="H2" title="Heading 2">H2</button>
+              <button type="button" data-command="formatBlock" data-value="H3" title="Heading 3">H3</button>
+              <button type="button" data-command="formatBlock" data-value="P" title="Paragraph">P</button>
+              <button type="button" data-command="bold" title="Bold">B</button>
+              <button type="button" data-command="italic" title="Italic">I</button>
+              <button type="button" data-command="insertUnorderedList" title="Bulleted list">•</button>
+              <button type="button" data-command="insertOrderedList" title="Numbered list">1.</button>
             </div>
+            <div
+              id="contentInput"
+              class="content-editor"
+              contenteditable="true"
+              role="textbox"
+              aria-labelledby="contentLabel"
+              aria-multiline="true"
+              spellcheck="true"
+            ></div>
             <div class="progress" aria-hidden="true">
               <span id="progressFill"></span>
             </div>
@@ -290,23 +355,15 @@
     <script>
       const titleInput = document.querySelector("#titleInput");
       const contentInput = document.querySelector("#contentInput");
-      const highlightLayer = document.querySelector("#highlightLayer");
       const progressFill = document.querySelector("#progressFill");
       const titleTotal = document.querySelector("#titleTotal");
       const titleInline = document.querySelector("#titleInline");
       const contentTotal = document.querySelector("#contentTotal");
       const contentInline = document.querySelector("#contentInline");
       const overTotal = document.querySelector("#overTotal");
+      const wordTotal = document.querySelector("#wordTotal");
+      const wordInline = document.querySelector("#wordInline");
       const highlightLimit = 160;
-
-      function escapeHtml(value) {
-        return value
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
 
       function updateTitle() {
         const count = titleInput.value.length;
@@ -316,30 +373,146 @@
         titleInput.style.height = `${titleInput.scrollHeight}px`;
       }
 
-      function updateContent() {
-        const value = contentInput.value;
-        const highlighted = escapeHtml(value.slice(0, highlightLimit));
-        const rest = escapeHtml(value.slice(highlightLimit));
-        const placeholder = value.length === 0 ? "&nbsp;" : "";
+      function getTextLength(root) {
+        return root.textContent.replace(/\u00a0/g, " ").length;
+      }
 
-        highlightLayer.innerHTML = `${placeholder}<mark>${highlighted}</mark>${rest}`;
-        contentTotal.textContent = value.length;
-        contentInline.textContent = value.length;
-        overTotal.textContent = Math.max(0, value.length - highlightLimit);
+      function getWordCount(value) {
+        return value.trim().match(/\S+/g)?.length || 0;
+      }
+
+      function saveSelection(root) {
+        const selection = window.getSelection();
+
+        if (!selection.rangeCount) {
+          return null;
+        }
+
+        const range = selection.getRangeAt(0);
+
+        if (!root.contains(range.startContainer)) {
+          return null;
+        }
+
+        const before = range.cloneRange();
+        before.selectNodeContents(root);
+        before.setEnd(range.startContainer, range.startOffset);
+
+        return before.toString().length;
+      }
+
+      function restoreSelection(root, offset) {
+        if (offset === null) {
+          return;
+        }
+
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let remaining = offset;
+        let node = walker.nextNode();
+
+        while (node) {
+          if (remaining <= node.textContent.length) {
+            const range = document.createRange();
+            const selection = window.getSelection();
+            range.setStart(node, remaining);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            return;
+          }
+
+          remaining -= node.textContent.length;
+          node = walker.nextNode();
+        }
+
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(root);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      function unwrapHighlights(root) {
+        root.querySelectorAll("mark[data-count-highlight]").forEach((mark) => {
+          mark.replaceWith(...mark.childNodes);
+        });
+        root.normalize();
+      }
+
+      function highlightFirstCharacters(root, limit) {
+        unwrapHighlights(root);
+
+        if (limit <= 0) {
+          return;
+        }
+
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            return node.textContent.length
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_REJECT;
+          },
+        });
+        let remaining = limit;
+        const ranges = [];
+        let node = walker.nextNode();
+
+        while (node && remaining > 0) {
+          const length = Math.min(node.textContent.length, remaining);
+          const range = document.createRange();
+          range.setStart(node, 0);
+          range.setEnd(node, length);
+          ranges.push(range);
+          remaining -= length;
+          node = walker.nextNode();
+        }
+
+        ranges.forEach((range) => {
+          const mark = document.createElement("mark");
+          mark.dataset.countHighlight = "true";
+          range.surroundContents(mark);
+        });
+      }
+
+      function updateContent() {
+        const caret = saveSelection(contentInput);
+        highlightFirstCharacters(contentInput, highlightLimit);
+
+        const value = contentInput.textContent.replace(/\u00a0/g, " ");
+        const characterCount = getTextLength(contentInput);
+        const wordCount = getWordCount(value);
+
+        contentTotal.textContent = characterCount;
+        contentInline.textContent = characterCount;
+        overTotal.textContent = Math.max(0, characterCount - highlightLimit);
+        wordTotal.textContent = wordCount;
+        wordInline.textContent = wordCount;
         progressFill.style.setProperty(
           "--progress",
-          `${Math.min(100, (value.length / highlightLimit) * 100)}%`,
+          `${Math.min(100, (characterCount / highlightLimit) * 100)}%`,
         );
+
+        restoreSelection(contentInput, caret);
       }
 
-      function syncScroll() {
-        highlightLayer.scrollTop = contentInput.scrollTop;
-        highlightLayer.scrollLeft = contentInput.scrollLeft;
-      }
+      document.querySelectorAll(".toolbar button").forEach((button) => {
+        button.addEventListener("click", () => {
+          contentInput.focus();
+          document.execCommand(
+            button.dataset.command,
+            false,
+            button.dataset.value || null,
+          );
+          updateContent();
+        });
+      });
 
       titleInput.addEventListener("input", updateTitle);
       contentInput.addEventListener("input", updateContent);
-      contentInput.addEventListener("scroll", syncScroll);
+      contentInput.addEventListener("paste", () => {
+        requestAnimationFrame(updateContent);
+      });
 
       updateTitle();
       updateContent();
