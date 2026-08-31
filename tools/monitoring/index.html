@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Lightweight testing and change monitors for john-ta.com." />
+    <title>Monitoring — John Ta</title>
+    <link rel="icon" href="../../assets/img/favicon.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to monitoring overview</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="John Ta home">JT<span aria-hidden="true">/</span>MONITOR</a>
+      <nav aria-label="Monitoring links">
+        <a href="#monitors">Monitors</a>
+        <a href="#history">History</a>
+        <a href="data/change-feed.json">JSON feed</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Codex testing monitors</p>
+          <h1 id="page-title">Quiet when stable.<br /><span>Obvious when changed.</span></h1>
+          <p class="lede">A repository-backed view of small checks that should not need a database, a server, or constant attention.</p>
+        </div>
+        <div id="overall-status" class="overall-card is-loading" role="status" aria-live="polite">
+          <span class="status-orb" aria-hidden="true"></span>
+          <div>
+            <span class="label">System status</span>
+            <strong>Loading monitor data…</strong>
+            <span class="meta">Reading the latest repository snapshot</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Monitoring summary">
+        <article class="metric-card">
+          <span class="metric-label">Active monitors</span>
+          <strong id="active-count">—</strong>
+          <span id="configured-count" class="metric-note">Loading configuration</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Latest successful run</span>
+          <strong id="latest-success">—</strong>
+          <span id="latest-success-date" class="metric-note">No data loaded</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Last meaningful change</span>
+          <strong id="last-change">—</strong>
+          <span id="last-change-date" class="metric-note">No recorded changes</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Retained runs</span>
+          <strong id="run-count">—</strong>
+          <span class="metric-note">Hourly snapshots · 14 day cap</span>
+        </article>
+      </section>
+
+      <div id="load-error" class="alert error-alert" role="alert" hidden>
+        <strong>Monitor data could not be loaded.</strong>
+        <span>This static page is intact, but its JSON snapshot is missing or invalid. Try refreshing or inspect the workflow.</span>
+      </div>
+
+      <section id="monitors" class="section-block" aria-labelledby="monitors-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Unified status</p>
+            <h2 id="monitors-title">Monitors</h2>
+          </div>
+          <p id="generated-at" class="updated-time">Snapshot time unavailable</p>
+        </div>
+
+        <div id="monitor-list" class="monitor-list" aria-live="polite">
+          <article class="monitor-card skeleton" aria-hidden="true"></article>
+        </div>
+      </section>
+
+      <section class="detail-grid" aria-label="Paze directory details">
+        <article class="panel diff-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Latest comparison</p>
+              <h2>Before / after</h2>
+            </div>
+            <span id="confirmation-badge" class="badge neutral">Awaiting data</span>
+          </div>
+          <div id="latest-diff" class="empty-state">Loading the latest comparison…</div>
+        </article>
+
+        <article class="panel roster-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Successful baseline</p>
+              <h2>Current merchants</h2>
+            </div>
+            <span id="merchant-total" class="count-bubble">—</span>
+          </div>
+          <div id="merchant-roster" class="merchant-roster" aria-label="Current Paze merchants"></div>
+        </article>
+      </section>
+
+      <section id="history" class="section-block" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Repository history</p>
+            <h2 id="history-title">Recent runs</h2>
+          </div>
+          <p class="section-note">Stable runs are collapsed. Changes and failures stay open.</p>
+        </div>
+        <div id="run-history" class="run-history">
+          <p class="empty-state">Loading run history…</p>
+        </div>
+      </section>
+
+      <section class="feed-callout" aria-labelledby="feed-title">
+        <div>
+          <p class="eyebrow">For Codex heartbeats</p>
+          <h2 id="feed-title">One feed, only meaningful events.</h2>
+          <p>Merchant changes, failures, and recoveries are consolidated into a stable machine-readable endpoint.</p>
+        </div>
+        <a class="button-link" href="data/change-feed.json">Open change feed <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+
+    <footer>
+      <span>john-ta.com monitoring</span>
+      <span>Static files · GitHub Actions · Git history</span>
+    </footer>
+
+    <noscript>
+      <div class="noscript">JavaScript is required to render the repository JSON. The raw <a href="data/change-feed.json">change feed remains available</a>.</div>
+    </noscript>
+  </body>
+</html>

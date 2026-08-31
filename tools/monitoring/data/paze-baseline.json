@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "monitorId": "paze-directory",
+  "sourceUrl": "https://www.paze.com/merchant-directory?page=0",
+  "capturedAt": "2026-08-31T17:26:02.077Z",
+  "merchants": [
+    {
+      "name": "1-800-Flowers",
+      "key": "1 800 flowers"
+    },
+    {
+      "name": "Banter by Piercing Pagoda",
+      "key": "banter by piercing pagoda"
+    },
+    {
+      "name": "Broadway.com",
+      "key": "broadway com"
+    },
+    {
+      "name": "City Experiences",
+      "key": "city experiences"
+    },
+    {
+      "name": "Domino's",
+      "key": "domino s"
+    },
+    {
+      "name": "Dunkin",
+      "key": "dunkin"
+    },
+    {
+      "name": "Durango",
+      "key": "durango"
+    },
+    {
+      "name": "Fanatics",
+      "key": "fanatics"
+    },
+    {
+      "name": "FTD",
+      "key": "ftd"
+    },
+    {
+      "name": "Georgia Boot",
+      "key": "georgia boot"
+    },
+    {
+      "name": "GNC",
+      "key": "gnc"
+    },
+    {
+      "name": "Harry & David",
+      "key": "harry and david"
+    },
+    {
+      "name": "Jared",
+      "key": "jared"
+    },
+    {
+      "name": "KAY Jewelers",
+      "key": "kay jewelers"
+    },
+    {
+      "name": "Lids",
+      "key": "lids"
+    },
+    {
+      "name": "Little Caesars",
+      "key": "little caesars"
+    },
+    {
+      "name": "Macy's",
+      "key": "macy s"
+    },
+    {
+      "name": "Muck Boot Company",
+      "key": "muck boot company"
+    },
+    {
+      "name": "Newegg",
+      "key": "newegg"
+    },
+    {
+      "name": "PayRange",
+      "key": "payrange"
+    },
+    {
+      "name": "Personalization Mall",
+      "key": "personalization mall"
+    },
+    {
+      "name": "Proflowers",
+      "key": "proflowers"
+    },
+    {
+      "name": "Roku",
+      "key": "roku"
+    },
+    {
+      "name": "ShopRite",
+      "key": "shoprite"
+    },
+    {
+      "name": "StubHub",
+      "key": "stubhub"
+    },
+    {
+      "name": "Teleflora",
+      "key": "teleflora"
+    },
+    {
+      "name": "United Airlines",
+      "key": "united airlines"
+    },
+    {
+      "name": "USA Today",
+      "key": "usa today"
+    },
+    {
+      "name": "Wendy's",
+      "key": "wendy s"
+    },
+    {
+      "name": "Whataburger",
+      "key": "whataburger"
+    },
+    {
+      "name": "Xsolla",
+      "key": "xsolla"
+    },
+    {
+      "name": "XTRATUF",
+      "key": "xtratuf"
+    },
+    {
+      "name": "Zales",
+      "key": "zales"
+    }
+  ]
+}
